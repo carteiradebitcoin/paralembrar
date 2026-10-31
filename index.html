@@ -1,0 +1,1033 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ParaLembrar - Catálogo &amp; Preços</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: #07090e;
+      color: #e2e8f0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding: 16px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1080px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      flex-grow: 1;
+    }
+
+    /* Header */
+    .header-card {
+      background-color: #111726;
+      border: 1px solid #1e293b;
+      border-radius: 14px;
+      padding: 14px 18px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #06b6d4, #2563eb);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 10px rgba(6, 182, 212, 0.3);
+    }
+
+    .brand-icon svg {
+      width: 20px;
+      height: 20px;
+      stroke: #ffffff;
+      fill: none;
+    }
+
+    .brand-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .badge-tag {
+      font-family: Consolas, "JetBrains Mono", monospace;
+      font-size: 10px;
+      padding: 2px 6px;
+      border-radius: 4px;
+      background-color: rgba(6, 182, 212, 0.15);
+      border: 1px solid rgba(6, 182, 212, 0.35);
+      color: #38bdf8;
+      text-transform: uppercase;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    /* Botões */
+    .btn {
+      font-family: Consolas, "JetBrains Mono", monospace;
+      font-size: 11px;
+      font-weight: 600;
+      border-radius: 8px;
+      padding: 7px 14px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+      border: 1px solid transparent;
+      text-decoration: none;
+    }
+
+    .btn-secondary {
+      background-color: #1e293b;
+      border-color: #334155;
+      color: #cbd5e1;
+    }
+
+    .btn-secondary:hover {
+      background-color: #334155;
+      color: #ffffff;
+    }
+
+    .btn-primary {
+      background-color: #0284c7;
+      color: #ffffff;
+      box-shadow: 0 2px 8px rgba(2, 132, 199, 0.3);
+    }
+
+    .btn-primary:hover {
+      background-color: #0369a1;
+    }
+
+    .btn-emerald {
+      background-color: rgba(16, 185, 129, 0.15);
+      border-color: rgba(16, 185, 129, 0.4);
+      color: #34d399;
+    }
+
+    .btn-emerald:hover {
+      background-color: #10b981;
+      color: #ffffff;
+    }
+
+    .btn-danger {
+      background-color: rgba(239, 68, 68, 0.12);
+      border-color: rgba(239, 68, 68, 0.35);
+      color: #f87171;
+    }
+
+    .btn-danger:hover {
+      background-color: #ef4444;
+      color: #ffffff;
+    }
+
+    /* Painel do Formulário */
+    .form-panel {
+      display: none;
+      background-color: #111726;
+      border: 1px solid #06b6d4;
+      border-radius: 14px;
+      padding: 16px;
+      box-shadow: 0 4px 20px rgba(6, 182, 212, 0.15);
+    }
+
+    .form-header {
+      font-family: Consolas, "JetBrains Mono", monospace;
+      font-size: 12px;
+      font-weight: 700;
+      color: #38bdf8;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .form-group label {
+      display: block;
+      font-family: Consolas, "JetBrains Mono", monospace;
+      font-size: 10px;
+      color: #94a3b8;
+      text-transform: uppercase;
+      margin-bottom: 5px;
+    }
+
+    .form-group input, .form-group textarea, .form-group select {
+      width: 100%;
+      background-color: #0b0f19;
+      border: 1px solid #1e293b;
+      border-radius: 6px;
+      color: #38bdf8;
+      font-family: Consolas, "JetBrains Mono", monospace;
+      font-size: 12px;
+      padding: 8px 10px;
+      outline: none;
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      min-height: 38px;
+    }
+
+    .form-group input:focus, .form-group textarea:focus {
+      border-color: #06b6d4;
+    }
+
+    .photo-preview-container {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 6px;
+    }
+
+    .photo-preview {
+      width: 52px;
+      height: 52px;
+      border-radius: 8px;
+      background-color: #0b0f19;
+      border: 1px solid #1e293b;
+      object-fit: cover;
+      display: none;
+    }
+
+    /* Controles & Filtros */
+    .controls-card {
+      background-color: #111726;
+      border: 1px solid #1e293b;
+      border-radius: 12px;
+      padding: 10px 14px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .search-box {
+      flex: 1;
+      min-width: 220px;
+      position: relative;
+    }
+
+    .search-box input {
+      width: 100%;
+      background-color: #0b0f19;
+      border: 1px solid #1e293b;
+      border-radius: 8px;
+      color: #f1f5f9;
+      font-family: Consolas, "JetBrains Mono", monospace;
+      font-size: 12px;
+      padding: 7px 10px 7px 30px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .search-box input:focus {
+      border-color: #06b6d4;
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 9px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #64748b;
+      font-size: 12px;
+    }
+
+    .order-select {
+      background-color: #0b0f19;
+      border: 1px solid #1e293b;
+      border-radius: 8px;
+      color: #94a3b8;
+      font-family: Consolas, "JetBrains Mono", monospace;
+      font-size: 11px;
+      padding: 6px 10px;
+      outline: none;
+      cursor: pointer;
+    }
+
+    .category-pills {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      max-width: 100%;
+      padding-bottom: 2px;
+    }
+
+    .pill {
+      font-family: Consolas, "JetBrains Mono", monospace;
+      font-size: 11px;
+      padding: 4px 10px;
+      border-radius: 6px;
+      background-color: #0b0f19;
+      border: 1px solid #1e293b;
+      color: #94a3b8;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s;
+      user-select: none;
+    }
+
+    .pill:hover {
+      color: #f1f5f9;
+      border-color: #334155;
+    }
+
+    .pill.active {
+      background-color: rgba(6, 182, 212, 0.15);
+      border-color: #06b6d4;
+      color: #38bdf8;
+      font-weight: 600;
+    }
+
+    /* Grid de Itens */
+    .items-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+      gap: 14px;
+    }
+
+    .item-card {
+      background-color: #111726;
+      border: 1px solid #1e293b;
+      border-radius: 12px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 10px;
+      transition: all 0.2s ease;
+      position: relative;
+    }
+
+    .item-card:hover {
+      border-color: #38bdf8;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+    }
+
+    .item-header {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+    }
+
+    .item-img {
+      width: 64px;
+      height: 64px;
+      border-radius: 8px;
+      background-color: #0b0f19;
+      border: 1px solid #1e293b;
+      object-fit: cover;
+      flex-shrink: 0;
+      cursor: zoom-in;
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+
+    .item-img:hover {
+      transform: scale(1.05);
+      border-color: #06b6d4;
+    }
+
+    .item-no-img {
+      width: 64px;
+      height: 64px;
+      border-radius: 8px;
+      background-color: #0b0f19;
+      border: 1px solid #1e293b;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      color: #475569;
+      flex-shrink: 0;
+    }
+
+    .item-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .item-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: #f1f5f9;
+      word-break: break-word;
+      line-height: 1.25;
+      margin-bottom: 4px;
+    }
+
+    .item-price {
+      font-family: Consolas, "JetBrains Mono", monospace;
+      font-size: 15px;
+      font-weight: 700;
+      color: #34d399;
+    }
+
+    .item-local-row {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+      color: #cbd5e1;
+      font-family: Consolas, "JetBrains Mono", monospace;
+      margin-top: 4px;
+    }
+
+    .item-desc {
+      font-size: 11px;
+      color: #94a3b8;
+      line-height: 1.35;
+      word-break: break-word;
+      background-color: #0b0f19;
+      padding: 6px 8px;
+      border-radius: 6px;
+      border: 1px solid #162032;
+    }
+
+    .item-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid #1e293b;
+      padding-top: 8px;
+      margin-top: 4px;
+    }
+
+    .item-category-tag {
+      font-family: Consolas, "JetBrains Mono", monospace;
+      font-size: 10px;
+      padding: 2px 7px;
+      border-radius: 4px;
+      background-color: #0b0f19;
+      border: 1px solid #1e293b;
+      color: #38bdf8;
+      text-transform: uppercase;
+    }
+
+    .card-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-icon {
+      background: transparent;
+      border: none;
+      color: #64748b;
+      cursor: pointer;
+      padding: 4px;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s;
+    }
+
+    .btn-icon:hover {
+      background-color: #1e293b;
+      color: #f1f5f9;
+    }
+
+    .btn-icon.edit:hover {
+      color: #38bdf8;
+    }
+
+    .btn-icon.delete:hover {
+      color: #f87171;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 60px 10px;
+      color: #64748b;
+      font-family: Consolas, "JetBrains Mono", monospace;
+      font-size: 13px;
+    }
+
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid #1e293b;
+      padding-top: 10px;
+      font-size: 11px;
+      color: #64748b;
+      font-family: Consolas, "JetBrains Mono", monospace;
+      margin-top: 10px;
+    }
+
+    /* Modal de Ampliação de Foto (Lightbox) */
+    .image-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background-color: rgba(7, 9, 14, 0.88);
+      backdrop-filter: blur(8px);
+      z-index: 2000;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      cursor: zoom-out;
+    }
+
+    .modal-content-wrapper {
+      position: relative;
+      max-width: 90vw;
+      max-height: 85vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      cursor: default;
+    }
+
+    .modal-img {
+      max-width: 100%;
+      max-height: 75vh;
+      object-fit: contain;
+      border-radius: 12px;
+      border: 1px solid #1e293b;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+    }
+
+    .modal-caption {
+      font-family: Consolas, "JetBrains Mono", monospace;
+      font-size: 13px;
+      color: #f1f5f9;
+      text-align: center;
+      background-color: #111726;
+      border: 1px solid #1e293b;
+      padding: 6px 14px;
+      border-radius: 8px;
+    }
+
+    .modal-close-btn {
+      position: absolute;
+      top: -38px;
+      right: 0;
+      background: transparent;
+      border: none;
+      color: #94a3b8;
+      font-size: 24px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: color 0.2s;
+    }
+
+    .modal-close-btn:hover {
+      color: #f87171;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Modal para Ampliar Imagem -->
+  <div id="imageModal" class="image-modal" onclick="closeImageModal()">
+    <div class="modal-content-wrapper" onclick="event.stopPropagation()">
+      <button class="modal-close-btn" onclick="closeImageModal()" title="Fechar (Esc)">✕</button>
+      <img id="modalImgTag" class="modal-img" src="" alt="Foto Ampliada">
+      <div id="modalCaptionTag" class="modal-caption"></div>
+    </div>
+  </div>
+
+  <div class="container">
+    
+    <!-- Header -->
+    <header class="header-card">
+      <div class="brand">
+        <div class="brand-icon">
+          <svg viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+          </svg>
+        </div>
+        <div class="brand-title">
+          ParaLembrar <span class="badge-tag">Catálogo &amp; Preços</span>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <button class="btn btn-primary" onclick="openCreateForm()">
+          ➕ <span>Novo Item</span>
+        </button>
+        <button class="btn btn-emerald" onclick="downloadHtml()" title="Salva todas as fotos e itens direto no arquivo HTML">
+          💾 <span>Guardar HTML</span>
+        </button>
+        <button class="btn btn-danger" onclick="clearAllItems()" title="Limpa todos os itens cadastrados">
+          🗑️ <span>Zerar Tudo</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Formulário -->
+    <div id="formPanel" class="form-panel">
+      <div class="form-header" id="formHeaderTitle"><span>➕ Novo Item</span></div>
+      <input type="hidden" id="editItemId" value="">
+      <input type="hidden" id="itemPhotoBase64" value="">
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="itemTitle">Produto / Nome *</label>
+          <input type="text" id="itemTitle" placeholder="Ex: Café Torrado 500g">
+        </div>
+        <div class="form-group">
+          <label for="itemPrice">Preço (R$) *</label>
+          <input type="number" step="0.01" id="itemPrice" placeholder="Ex: 18.90">
+        </div>
+        <div class="form-group">
+          <label for="itemLocal">Local / Mercado *</label>
+          <input type="text" id="itemLocal" placeholder="Ex: Savegnago, Dia, Amazon">
+        </div>
+        <div class="form-group">
+          <label for="itemCategory">Categoria *</label>
+          <input type="text" id="itemCategory" placeholder="Ex: Mercearia, Limpeza, Ferramentas">
+        </div>
+        <div class="form-group">
+          <label for="itemPhotoInput">Foto do Produto (Comprime automaticamente)</label>
+          <input type="file" id="itemPhotoInput" accept="image/*" onchange="handlePhotoUpload(event)">
+          <div class="photo-preview-container">
+            <img id="photoPreviewImg" class="photo-preview" alt="Prévia">
+            <button type="button" id="btnRemovePhoto" class="btn btn-secondary" style="display:none; padding: 3px 8px; font-size: 10px;" onclick="removePhoto()">Remover Foto</button>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="itemDesc">Descrição / Observações</label>
+          <textarea id="itemDesc" placeholder="Ex: Marca preferida, validade, tamanho, observações..."></textarea>
+        </div>
+      </div>
+
+      <div style="display: flex; justify-content: flex-end; gap: 8px;">
+        <button class="btn btn-secondary" onclick="closeForm()">Cancelar</button>
+        <button class="btn btn-primary" id="saveButton" onclick="saveItemAction()">Salvar Item</button>
+      </div>
+    </div>
+
+    <!-- Barra de Filtros & Ordenação -->
+    <div class="controls-card">
+      <div class="search-box">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="searchInput" placeholder="Filtrar por produto, local, categoria, descrição..." oninput="render()">
+      </div>
+      <select id="sortSelect" class="order-select" onchange="render()">
+        <option value="date-desc">Mais recentes</option>
+        <option value="price-asc">Menor Preço</option>
+        <option value="price-desc">Maior Preço</option>
+        <option value="title-asc">Nome (A - Z)</option>
+      </select>
+      <div class="category-pills" id="categoryPills"></div>
+    </div>
+
+    <!-- Grid de Exibição -->
+    <main id="itemsContainer" class="items-grid"></main>
+
+    <!-- Rodapé -->
+    <footer class="footer">
+      <span>Total: <strong id="totalCount" style="color: #38bdf8;">0</strong> itens cadastrados</span>
+      <span>Base64 Portátil • Pronto para GitHub Pages</span>
+    </footer>
+
+  </div>
+
+  <script>
+    // =========================================================================
+    // DADOS SALVOS NO PRÓPRIO ARQUIVO HTML
+    // =========================================================================
+    /* __ITEMS_PAYLOAD_PLACEHOLDER__ */
+    let itemsDatabase = [];
+
+    let currentFilterCategory = 'ALL';
+
+    function initApp() {
+      // Fecha modal com tecla ESC
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeImageModal();
+      });
+      render();
+    }
+
+    // --- Compressão da Foto com Canvas ---
+    function handlePhotoUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const img = new Image();
+        img.onload = function() {
+          const canvas = document.createElement('canvas');
+          const maxDim = 600; // Resolução ideal para boa visualização ampliada e peso leve
+          let width = img.width;
+          let height = img.height;
+
+          if (width > height) {
+            if (width > maxDim) {
+              height = Math.round((height * maxDim) / width);
+              width = maxDim;
+            }
+          } else {
+            if (height > maxDim) {
+              width = Math.round((width * maxDim) / height);
+              height = maxDim;
+            }
+          }
+
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, width, height);
+
+          const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.80);
+          document.getElementById('itemPhotoBase64').value = compressedDataUrl;
+          
+          const preview = document.getElementById('photoPreviewImg');
+          preview.src = compressedDataUrl;
+          preview.style.display = 'block';
+          document.getElementById('btnRemovePhoto').style.display = 'inline-flex';
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function removePhoto() {
+      document.getElementById('itemPhotoBase64').value = '';
+      document.getElementById('itemPhotoInput').value = '';
+      const preview = document.getElementById('photoPreviewImg');
+      preview.src = '';
+      preview.style.display = 'none';
+      document.getElementById('btnRemovePhoto').style.display = 'none';
+    }
+
+    // --- Modal de Ampliação de Foto ---
+    function openImageModal(imgSrc, title, price) {
+      const modal = document.getElementById('imageModal');
+      const modalImg = document.getElementById('modalImgTag');
+      const caption = document.getElementById('modalCaptionTag');
+
+      modalImg.src = imgSrc;
+      caption.textContent = `${title} • ${price}`;
+      modal.style.display = 'flex';
+    }
+
+    function closeImageModal() {
+      const modal = document.getElementById('imageModal');
+      modal.style.display = 'none';
+      document.getElementById('modalImgTag').src = '';
+    }
+
+    // --- Formulário ---
+    function openCreateForm() {
+      document.getElementById('editItemId').value = '';
+      document.getElementById('itemTitle').value = '';
+      document.getElementById('itemPrice').value = '';
+      document.getElementById('itemLocal').value = '';
+      document.getElementById('itemCategory').value = '';
+      document.getElementById('itemDesc').value = '';
+      removePhoto();
+
+      document.getElementById('formHeaderTitle').innerHTML = '<span>➕ Novo Item</span>';
+      document.getElementById('saveButton').textContent = 'Salvar Item';
+
+      const panel = document.getElementById('formPanel');
+      panel.style.display = 'block';
+      panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      document.getElementById('itemTitle').focus();
+    }
+
+    function editItem(id) {
+      const item = itemsDatabase.find(i => i.id === id);
+      if (!item) return;
+
+      document.getElementById('editItemId').value = item.id;
+      document.getElementById('itemTitle').value = item.title;
+      document.getElementById('itemPrice').value = item.price;
+      document.getElementById('itemLocal').value = item.local;
+      document.getElementById('itemCategory').value = item.category;
+      document.getElementById('itemDesc').value = item.desc || '';
+
+      if (item.photo) {
+        document.getElementById('itemPhotoBase64').value = item.photo;
+        const preview = document.getElementById('photoPreviewImg');
+        preview.src = item.photo;
+        preview.style.display = 'block';
+        document.getElementById('btnRemovePhoto').style.display = 'inline-flex';
+      } else {
+        removePhoto();
+      }
+
+      document.getElementById('formHeaderTitle').innerHTML = '<span>✏️ Editar Item</span>';
+      document.getElementById('saveButton').textContent = 'Atualizar Item';
+
+      const panel = document.getElementById('formPanel');
+      panel.style.display = 'block';
+      panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      document.getElementById('itemTitle').focus();
+    }
+
+    function closeForm() {
+      document.getElementById('formPanel').style.display = 'none';
+      document.getElementById('editItemId').value = '';
+    }
+
+    function saveItemAction() {
+      const editId = document.getElementById('editItemId').value;
+      const title = document.getElementById('itemTitle').value.trim();
+      const priceVal = parseFloat(document.getElementById('itemPrice').value);
+      const local = document.getElementById('itemLocal').value.trim();
+      const category = document.getElementById('itemCategory').value.trim() || 'Geral';
+      const desc = document.getElementById('itemDesc').value.trim();
+      const photo = document.getElementById('itemPhotoBase64').value;
+
+      if (!title || isNaN(priceVal) || !local) {
+        alert('Por favor, preencha ao menos o Produto, o Preço e o Local.');
+        return;
+      }
+
+      if (editId) {
+        const index = itemsDatabase.findIndex(i => i.id === editId);
+        if (index !== -1) {
+          itemsDatabase[index] = {
+            ...itemsDatabase[index],
+            title,
+            price: priceVal,
+            local,
+            category,
+            desc,
+            photo
+          };
+        }
+      } else {
+        itemsDatabase.unshift({
+          id: Date.now().toString(),
+          title,
+          price: priceVal,
+          local,
+          category,
+          desc,
+          photo,
+          date: new Date().toISOString()
+        });
+      }
+
+      render();
+      closeForm();
+    }
+
+    function deleteItem(id) {
+      const item = itemsDatabase.find(i => i.id === id);
+      const name = item ? `"${item.title}"` : "este item";
+      if (confirm(`Deseja realmente excluir ${name}?`)) {
+        itemsDatabase = itemsDatabase.filter(i => i.id !== id);
+        render();
+      }
+    }
+
+    function clearAllItems() {
+      if (!confirm("⚠️ Tem certeza que deseja apagar TODOS os itens cadastrados?")) return;
+      if (!confirm("Esta ação limpará o catálogo por completo. Deseja prosseguir?")) return;
+      itemsDatabase = [];
+      render();
+    }
+
+    // --- Renderização e Filtros ---
+    function setCategory(cat) {
+      currentFilterCategory = cat;
+      render();
+    }
+
+    function renderCategoryPills(categories) {
+      const container = document.getElementById('categoryPills');
+      container.innerHTML = '';
+
+      const allPill = document.createElement('button');
+      allPill.className = `pill ${currentFilterCategory === 'ALL' ? 'active' : ''}`;
+      allPill.textContent = 'Todas';
+      allPill.onclick = () => setCategory('ALL');
+      container.appendChild(allPill);
+
+      categories.forEach(cat => {
+        const pill = document.createElement('button');
+        pill.className = `pill ${currentFilterCategory === cat ? 'active' : ''}`;
+        pill.textContent = cat;
+        pill.onclick = () => setCategory(cat);
+        container.appendChild(pill);
+      });
+    }
+
+    function render() {
+      const query = document.getElementById('searchInput').value.toLowerCase().trim();
+      const sort = document.getElementById('sortSelect').value;
+      const container = document.getElementById('itemsContainer');
+      document.getElementById('totalCount').textContent = itemsDatabase.length;
+
+      const categories = [...new Set(itemsDatabase.map(i => i.category || 'Geral'))];
+      renderCategoryPills(categories);
+
+      let filtered = itemsDatabase.filter(item => {
+        const matchQuery = 
+          item.title.toLowerCase().includes(query) ||
+          item.local.toLowerCase().includes(query) ||
+          (item.desc && item.desc.toLowerCase().includes(query)) ||
+          item.category.toLowerCase().includes(query);
+
+        const matchCat = currentFilterCategory === 'ALL' || item.category === currentFilterCategory;
+
+        return matchQuery && matchCat;
+      });
+
+      // Ordenação
+      filtered.sort((a, b) => {
+        if (sort === 'price-asc') return a.price - b.price;
+        if (sort === 'price-desc') return b.price - a.price;
+        if (sort === 'title-asc') return a.title.localeCompare(b.title);
+        return (b.id - a.id);
+      });
+
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state" style="grid-column: 1 / -1;">
+            Nenhum produto cadastrado ou encontrado para a busca.
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = '';
+
+      filtered.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'item-card';
+
+        const formattedPrice = item.price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+
+        card.innerHTML = `
+          <div>
+            <div class="item-header">
+              ${item.photo ? `
+                <img src="${item.photo}" class="item-img" alt="${escapeHtml(item.title)}" title="Clique para ampliar" onclick="openImageModal('${item.photo}', '${escapeJs(item.title)}', '${formattedPrice}')">
+              ` : `
+                <div class="item-no-img">📦</div>
+              `}
+              <div class="item-info">
+                <div class="item-title">${escapeHtml(item.title)}</div>
+                <div class="item-price">${formattedPrice}</div>
+                <div class="item-local-row">
+                  <span>📍</span>
+                  <span>${escapeHtml(item.local)}</span>
+                </div>
+              </div>
+            </div>
+
+            ${item.desc ? `
+              <div class="item-desc" style="margin-top: 8px;">
+                ${escapeHtml(item.desc)}
+              </div>
+            ` : ''}
+          </div>
+
+          <div class="item-footer">
+            <span class="item-category-tag">${escapeHtml(item.category)}</span>
+            <div class="card-actions">
+              <button class="btn-icon edit" onclick="editItem('${item.id}')" title="Editar Item">
+                <svg style="width: 15px; height: 15px;" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                </svg>
+              </button>
+              <button class="btn-icon delete" onclick="deleteItem('${item.id}')" title="Excluir Item">
+                <svg style="width: 15px; height: 15px;" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        `;
+
+        container.appendChild(card);
+      });
+    }
+
+    // --- Salvar o HTML com os dados atualizados ---
+    function downloadHtml() {
+      let htmlContent = document.documentElement.outerHTML;
+
+      const jsonDb = JSON.stringify(itemsDatabase);
+      htmlContent = htmlContent.replace(/let itemsDatabase = \[[\s\S]*?\];/, `let itemsDatabase = ${jsonDb};`);
+
+      // Limpa containers renderizados dinamicamente
+      htmlContent = htmlContent.replace(/<main id="itemsContainer"[^>]*>[\s\S]*?<\/main>/, `<main id="itemsContainer" class="items-grid"></main>`);
+      htmlContent = htmlContent.replace(/<div class="category-pills" id="categoryPills">[\s\S]*?<\/div>/, `<div class="category-pills" id="categoryPills"></div>`);
+      htmlContent = htmlContent.replace(/style="display:\s*flex;"/g, 'style="display: none;"'); // Garante modal e formulário fechados
+
+      const blob = new Blob(["<!DOCTYPE html>\n<html lang=\"pt-BR\">\n" + htmlContent + "\n</html>"], { type: 'text/html;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `ParaLembrar.html`;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function escapeHtml(text) {
+      if (!text) return '';
+      return String(text)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function escapeJs(text) {
+      if (!text) return '';
+      return String(text).replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/"/g, '\\"');
+    }
+
+    window.onload = initApp;
+  </script>
+</body>
+</html>
